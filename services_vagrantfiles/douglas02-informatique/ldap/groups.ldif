@@ -1,0 +1,14 @@
+dn: cn=info,ou=groups,dc=blanc,dc=iut
+objectClass: posixGroup
+cn: info
+gidNumber: 5000
+
+dn: cn=admin,ou=groups,dc=blanc,dc=iut
+objectClass: posixGroup
+cn: admin
+gidNumber: 5001
+
+dn: cn=prod,ou=groups,dc=blanc,dc=iut
+objectClass: posixGroup
+cn: prod
+gidNumber: 5002

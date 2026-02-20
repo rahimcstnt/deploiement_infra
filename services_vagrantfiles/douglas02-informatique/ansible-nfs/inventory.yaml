@@ -1,0 +1,12 @@
+nfs_server:
+  hosts:
+    localhost:
+      ansible_connection: local
+
+nfs_clients:
+  hosts:
+    userinfo.prive.blanc.iut.:
+    useradmin1.prive.blanc.iut.:
+    useradmin2.prive.blanc.iut.:
+    userprod.prive.blanc.iut.:
+

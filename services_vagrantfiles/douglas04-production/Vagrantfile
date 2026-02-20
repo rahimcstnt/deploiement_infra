@@ -1,0 +1,49 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "debian/bookworm64"
+
+  config.vm.provider "virtualbox" do |vb|
+  vb.memory = 4096
+  end
+  config.ssh.forward_x11 = true
+  config.vm.define "userprod1" do |userprod1|
+    userprod1.vm.network "forwarded_port", guest: 80, host: 8080
+    userprod1.vm.hostname = "userprod1"
+    userprod1.vm.network "public_network",
+      ip: "192.168.1.66",
+      netmask: "255.255.255.224",
+      bridge: "enp3s0"
+    userprod1.vm.provision "file", source: "./userprod1/ssh_key",   destination: "/tmp/"
+    userprod1.vm.provision "file", source: "./userprod1/policies.json",   destination: "/tmp/"
+    userprod1.vm.provision "file", source: "./userprod1/main.cf", destination: "/tmp/"
+    userprod1.vm.provision "file", source: "./userprod1/roundcube.conf", destination: "/tmp/"
+    userprod1.vm.provision "file", source: "./userprod1/dovecot.conf", destination: "/tmp/"
+    userprod1.vm.provision "file", source: "./userprod1/config.inc.php", destination: "/tmp/"
+    userprod1.vm.provision "shell", path: "./userprod1/script.sh"
+    userprod1.vm.provision "hosts", type: "shell", path: "./hostname.sh"
+    userprod1.vm.provision "resolv", type: "shell", path: "./resolv.sh"
+    userprod1.vm.provision "postfix-resolv", type: "shell", inline: "cp -a /etc/resolv.conf /var/spool/postfix/etc/"
+  end
+
+    config.vm.define "userprod2" do |userprod2|
+    userprod2.vm.network "forwarded_port", guest: 80, host: 8081
+    userprod2.vm.hostname = "userprod2"
+    userprod2.vm.network "public_network",
+      ip: "192.168.1.67",
+      netmask: "255.255.255.224",
+      bridge: "enp3s0"
+    userprod2.vm.provision "file", source: "./userprod2/ssh_key",   destination: "/tmp/"
+    userprod2.vm.provision "file", source: "./userprod2/policies.json",   destination: "/tmp/"
+    userprod2.vm.provision "file", source: "./userprod2/main.cf", destination: "/tmp/"
+    userprod2.vm.provision "file", source: "./userprod2/roundcube.conf", destination: "/tmp/"
+    userprod2.vm.provision "file", source: "./userprod2/dovecot.conf", destination: "/tmp/"
+    userprod2.vm.provision "file", source: "./userprod2/config.inc.php", destination: "/tmp/"
+    userprod2.vm.provision "shell", path: "./userprod2/script.sh"
+    userprod2.vm.provision "hosts", type: "shell", path: "./hostname.sh"
+    userprod2.vm.provision "resolv", type: "shell", path: "./resolv.sh"
+    userprod2.vm.provision "postfix-resolv", type: "shell", inline: "cp -a /etc/resolv.conf /var/spool/postfix/etc/"
+  end
+
+end

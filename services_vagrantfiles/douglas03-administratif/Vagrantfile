@@ -1,0 +1,42 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "debian/bookworm64"
+ 
+  config.vm.define "useradmin1" do |useradmin1|
+    useradmin1.vm.hostname = "useradmin1"
+    useradmin1.vm.network "public_network",
+      ip: "192.168.1.35",
+      netmask: "255.255.255.224",
+      bridge: "enp3s0"
+    useradmin1.vm.network "forwarded_port", guest: 80, host: 8080
+    useradmin1.vm.provision "file", source: "./useradmin1/ssh_key", destination: "/tmp/"
+    useradmin1.vm.provision "file", source: "./useradmin1/main.cf", destination: "/tmp/"
+    useradmin1.vm.provision "file", source: "./useradmin1/roundcube.conf", destination: "/tmp/"
+    useradmin1.vm.provision "file", source: "./useradmin1/dovecot.conf", destination: "/tmp/"
+    useradmin1.vm.provision "file", source: "./useradmin1/config.inc.php", destination: "/tmp/"
+    useradmin1.vm.provision "shell", path: "./useradmin1/script.sh"
+    useradmin1.vm.provision "hosts", type: "shell", path: "./hostname.sh"
+    useradmin1.vm.provision "resolv", type: "shell", path: "./resolv.sh"
+    useradmin1.vm.provision "postfix-resolv", type: "shell", inline: "cp -a /etc/resolv.conf /var/spool/postfix/etc/"
+  end
+
+  config.vm.define "useradmin2" do |useradmin2|
+    useradmin2.vm.hostname = "useradmin2"
+    useradmin2.vm.network "public_network",
+      ip: "192.168.1.36",
+      netmask: "255.255.255.224",
+      bridge: "enp3s0"
+    useradmin2.vm.network "forwarded_port", guest: 80, host: 8081
+    useradmin2.vm.provision "file", source: "./useradmin2/ssh_key", destination: "/tmp/"
+    useradmin2.vm.provision "file", source: "./useradmin2/main.cf", destination: "/tmp/"
+    useradmin2.vm.provision "file", source: "./useradmin2/roundcube.conf", destination: "/tmp/"
+    useradmin2.vm.provision "file", source: "./useradmin2/dovecot.conf", destination: "/tmp/"
+    useradmin2.vm.provision "file", source: "./useradmin2/config.inc.php", destination: "/tmp/"
+    useradmin2.vm.provision "shell", path: "./useradmin2/script.sh"
+    useradmin2.vm.provision "hosts", type: "shell", path: "./hostname.sh"
+    useradmin2.vm.provision "resolv", type: "shell", path: "./resolv.sh"
+    useradmin2.vm.provision "postfix-resolv", type: "shell", inline: "cp -a /etc/resolv.conf /var/spool/postfix/etc/"
+  end
+end

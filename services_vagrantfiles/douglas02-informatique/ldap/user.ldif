@@ -1,0 +1,99 @@
+dn: uid=mickhail,ou=people,dc=blanc,dc=iut
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: mickhail
+sn: Kochiev
+givenName: Mickhail
+cn: Mickhail Kochiev
+uidNumber: 10000
+gidNumber: 5000
+homeDirectory: /home/mickhail
+loginShell: /bin/bash
+mail: mickhail@blanc.iut
+
+dn: uid=revaz,ou=people,dc=blanc,dc=iut
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: revaz
+sn: Khudoev
+givenName: Revaz
+cn: Revaz Khudoev
+uidNumber: 10001
+gidNumber: 5000
+homeDirectory: /home/revaz
+loginShell: /bin/bash
+mail: revaz@blanc.iut
+
+dn: uid=abderrahim,ou=people,dc=blanc,dc=iut
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: abderrahim
+sn: Boughezal
+givenName: Abderrahim
+cn: Abderrahim Boughezal
+uidNumber: 10002
+gidNumber: 5001
+homeDirectory: /home/abderrahim
+loginShell: /bin/bash
+mail: abderrahim@blanc.iut
+
+dn: uid=userprod,ou=people,dc=blanc,dc=iut
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: userprod
+sn: Prod
+givenName: User
+cn: User Prod
+uidNumber: 11000
+gidNumber: 5002
+homeDirectory: /home/userprod
+loginShell: /bin/bash
+mail: userprod@blanc.iut
+
+dn: uid=useradmin1,ou=people,dc=blanc,dc=iut
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: useradmin1
+sn: Admin1
+givenName: User
+cn: User Admin1
+uidNumber: 11001
+gidNumber: 5001
+homeDirectory: /home/useradmin1
+loginShell: /bin/bash
+mail: useradmin1@blanc.iut
+
+dn: uid=useradmin2,ou=people,dc=blanc,dc=iut
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: useradmin2
+sn: Admin2
+givenName: User
+cn: User Admin2
+uidNumber: 11002
+gidNumber: 5001
+homeDirectory: /home/useradmin2
+loginShell: /bin/bash
+mail: useradmin2@blanc.iut
+
+dn: uid=userinfo,ou=people,dc=blanc,dc=iut
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: userinfo
+sn: Info
+givenName: User
+cn: User Info
+uidNumber: 11003
+gidNumber: 5000
+homeDirectory: /home/userinfo
+loginShell: /bin/bash
+mail: userinfo@blanc.iut
+
+

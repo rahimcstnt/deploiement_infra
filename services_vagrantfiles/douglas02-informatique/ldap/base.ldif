@@ -1,0 +1,11 @@
+dn: ou=people,dc=blanc,dc=iut
+objectClass: organizationalUnit
+ou: people
+
+dn: ou=groups,dc=blanc,dc=iut
+objectClass: organizationalUnit
+ou: groups
+
+dn: ou=services,dc=blanc,dc=iut
+objectClass: organizationalUnit
+ou: services

@@ -1,0 +1,30 @@
+include "/etc/bind/dhcpupdate.key";
+
+acl "net-prive" {
+    192.168.1.0/24;       
+};
+
+acl "net-public" {
+    192.168.2.0/24;       
+    192.168.3.0/24;
+    192.168.4.0/24;
+};
+
+zone "blanc.iut" {
+        type master;
+        file "/var/cache/bind/db.blanc.iut"; 
+        allow-query { net-public; net-prive;};
+};
+
+zone "prive.blanc.iut" {
+        type master;
+        file "/var/cache/bind/db.prive.blanc.iut"; // fichier de zone
+        allow-update { key "dhcpupdate"; };
+        allow-query { net-prive; };
+	notify yes;
+};
+
+
+
+
+

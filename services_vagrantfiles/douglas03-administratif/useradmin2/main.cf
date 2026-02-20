@@ -1,0 +1,25 @@
+# Nom du domaine
+myhostname = mail.blanc.iut
+mydomain = blanc.iut
+mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
+
+# Format de stockage des boîtes en Maildir
+home_mailbox = Maildir/
+
+# Interfaces réseau (écouter sur toutes les interfaces)
+inet_interfaces = all
+
+# On autorise tous les réseaux
+mynetworks = 192.168.1.0/24
+
+# Mode MTA / MSA
+smtpd_recipient_restrictions = permit_mynetworks, reject_unauth_destination
+
+# Désactiver IPv6 si non utilisé
+inet_protocols = ipv4
+compatibility_level = 3.6
+smtpd_sasl_auth_enable = yes
+smtpd_sasl_security_options = noanonymous
+smtpd_sasl_local_domain = $myhostname
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/auth

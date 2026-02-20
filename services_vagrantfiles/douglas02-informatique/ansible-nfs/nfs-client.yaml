@@ -1,0 +1,28 @@
+---
+- name: Installer et configurer les clients NFS
+  hosts: nfs_clients
+  become: yes
+  tasks:
+    - name: Installer nfs-common
+      apt:
+        name: nfs-common
+        state: present
+
+    - name: Créer /mnt/nfs
+      file:
+        path: /mnt/nfs
+        state: directory
+        owner: vagrant
+        group: vagrant
+
+    - name: Ajouter NFS dans fstab
+      lineinfile:
+        path: /etc/fstab
+        line: "192.168.1.4:/var/share/{{ inventory_hostname_short }} /mnt/nfs nfs defaults 0 0"
+
+    - name: Monter NFS
+      mount:
+        path: /mnt/nfs
+        src: "192.168.1.4:/var/share/{{ inventory_hostname_short }}"
+        fstype: nfs
+        state: mounted

@@ -1,0 +1,12 @@
+{
+  "policies": {
+    "Proxy": {
+      "Mode": "manual",
+      "HTTPProxy": "192.168.1.5:80",
+      "SSLProxy": "192.168.1.5:443",
+      "UseHTTPProxyForAllProtocols": false,
+      "Passthrough": "localhost, 127.0.0.1, <local>, 192.168.1.0/24"
+    }
+  }
+}
+

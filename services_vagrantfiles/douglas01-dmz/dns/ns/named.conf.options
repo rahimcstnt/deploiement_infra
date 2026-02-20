@@ -1,0 +1,28 @@
+acl "trusted" {
+    192.168.1.0/24;
+    127.0.0.1;
+    192.168.2.0/24;
+    192.168.3.0/24;
+    192.168.4.0/24;
+};
+
+
+
+options {
+        directory "/var/cache/bind";
+        recursion yes;
+        dnssec-validation no;
+        allow-recursion { trusted; };
+        allow-query { trusted; };
+        allow-query-cache { trusted; };
+        listen-on { any; };
+        listen-on-v6 { none; };
+ forwarders {
+   192.168.4.20;
+ };
+    notify explicit;
+    notify-delay 5;
+
+};
+
+

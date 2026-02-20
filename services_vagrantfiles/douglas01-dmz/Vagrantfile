@@ -1,0 +1,53 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+Vagrant.configure("2") do |config|
+  config.vm.box = "debian/bookworm64"
+  config.vm.define "ns" do |conf|
+    conf.vm.hostname = "nameserver"
+    conf.vm.network "public_network",
+      ip: "192.168.1.98",
+      netmask: "255.255.255.224",
+      bridge: "enp3s0"
+    conf.vm.provision "file", source: "./dns/ns/db.blanc.iut", destination: "/tmp/"
+    conf.vm.provision "file", source: "./dns/ns/db.prive.blanc.iut", destination: "/tmp/"
+    conf.vm.provision "file", source: "./dns/ns/named.conf.local", destination: "/tmp/"
+    conf.vm.provision "file", source: "./dns/ns/named.conf.options", destination: "/tmp/"
+    conf.vm.provision "file", source: "./dns/ns/dhcpupdate.key", destination: "/tmp/"
+    conf.vm.provision "shell", path: "./dns/ns/script.sh"
+    conf.vm.provision "hosts", type: "shell", path: "./hostname.sh"
+    conf.vm.provision "resolv", type: "shell", path: "./resolv.sh"
+  end
+
+  config.vm.define "mail" do |conf|
+    conf.vm.hostname = "mail"
+    conf.vm.network "public_network",
+      ip: "192.168.1.100",
+      netmask: "255.255.255.224",
+      bridge: "enp3s0"
+    conf.vm.network "forwarded_port", guest: 80, host: 8080
+    conf.vm.provision "file", source: "./mail/ssh_key", destination: "/tmp/"
+    conf.vm.provision "file", source: "./mail/main.cf", destination: "/tmp/"
+    conf.vm.provision "file", source: "./mail/roundcube.conf", destination: "/tmp/"
+    conf.vm.provision "file", source: "./mail/dovecot.conf", destination: "/tmp/"
+    conf.vm.provision "file", source: "./mail/config.inc.php", destination: "/tmp/"
+    conf.vm.provision "shell", path: "./mail/script.sh"
+    conf.vm.provision "hosts", type: "shell", path: "./hostname.sh"
+    conf.vm.provision "resolv", type: "shell", path: "./resolv.sh"
+    conf.vm.provision "postfix-resolv", type: "shell", inline: "cp -a /etc/resolv.conf /var/spool/postfix/etc/"
+  end
+
+  config.vm.define "web" do |conf| 
+    conf.vm.hostname = "web"
+    conf.vm.network "public_network",
+      ip: "192.168.1.101",
+      netmask: "255.255.255.224",
+      bridge: "enp3s0"
+    conf.vm.provision "file", source: "./web/ssh_key", destination: "/tmp/"
+    conf.vm.provision "file", source: "./web/index.php", destination: "/tmp/"
+    conf.vm.provision "shell", path: "./web/script.sh"
+    conf.vm.provision "hosts", type: "shell", path: "./hostname.sh", run: "always"
+    conf.vm.provision "resolv", type: "shell", path: "./resolv.sh", run: "always"
+  end 
+
+end
+

@@ -1,0 +1,22 @@
+dn: cn=admin,ou=groups,dc=blanc,dc=iut
+changetype: modify
+add: memberUid
+memberUid: revaz
+memberUid: mickhail
+memberUid: abderrahim
+
+dn: cn=prod,ou=groups,dc=blanc,dc=iut
+changetype: modify
+add: memberUid
+memberUid: userprod
+
+dn: cn=admin,ou=groups,dc=blanc,dc=iut
+changetype: modify
+add: memberUid
+memberUid: useradmin1
+memberUid: useradmin2
+
+dn: cn=info,ou=groups,dc=blanc,dc=iut
+changetype: modify
+add: memberUid
+memberUid: userinfo

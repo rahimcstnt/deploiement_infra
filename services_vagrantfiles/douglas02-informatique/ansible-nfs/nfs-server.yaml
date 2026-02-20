@@ -1,0 +1,39 @@
+---
+- name: Installer serveur NFS
+  hosts: nfs_server
+  become: yes
+  tasks:
+    - name: Installer nfs-kernel-server
+      apt:
+        name: nfs-kernel-server
+        state: present
+        update_cache: yes
+
+    - name: Créer répertoires
+      file:
+        path: /var/share/{{ item }}
+        state: directory
+      loop:
+        - userinfo
+        - useradmin1
+        - useradmin2
+        - userprod
+
+    - name: Configurer exports
+      lineinfile:
+        path: /etc/exports
+        line: "/var/share/{{ item }} {{ item }}.prive.blanc.iut(rw,sync,no_subtree_check,no_root_squash)"
+      loop:
+        - userinfo
+        - useradmin1
+        - useradmin2
+        - userprod
+
+    - name: Exporter
+      command: exportfs -ra
+
+    - name: Démarrer NFS
+      systemd:
+        name: nfs-kernel-server
+        state: restarted
+        enabled: yes

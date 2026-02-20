@@ -1,0 +1,80 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "debian/bookworm64" 
+
+  config.vm.define "dhcp" do |dhcp|
+    dhcp.vm.hostname = "dhcp"
+    dhcp.vm.network "public_network",
+      ip: "192.168.1.2",
+      bridge: "enp3s0",
+      netmask: "255.255.255.224"
+    dhcp.vm.provision "file", source: "./dhcp/isc-dhcp-server", destination: "/tmp/isc-dhcp-server"
+    dhcp.vm.provision "file", source: "./dhcp/dhcp", destination: "/tmp/dhcp"
+    dhcp.vm.provision "shell", path: "./dhcp/script.sh"
+    dhcp.vm.provision "hosts", type: "shell", path: "./hostname.sh"
+    dhcp.vm.provision "resolv", type: "shell", path: "./resolv.sh"
+  end
+
+  config.vm.define "ansible-nfs" do |conf|
+    conf.vm.hostname = "ansible-nfs"
+    conf.vm.network "public_network",
+      ip: "192.168.1.4",
+      netmask: "255.255.255.224",
+      bridge: "enp3s0"
+    conf.vm.provision "file", source: "./ansible-nfs/id_rsa.pub", destination: "/tmp/"
+    conf.vm.provision "file", source: "./ansible-nfs/id_rsa", destination: "/tmp/"
+    conf.vm.provision "shell", path: "./ansible-nfs/script.sh"
+    conf.vm.provision "hosts", type: "shell", path: "./hostname.sh"
+    conf.vm.provision "resolv", type: "shell", path: "./resolv.sh"
+  end
+
+  config.vm.define "apache" do |apache|
+    apache.vm.hostname = "apache"
+    apache.vm.network "public_network",
+      ip: "192.168.1.5",
+      netmask: "255.255.255.224",
+      bridge: "enp3s0"
+    apache.vm.provision "file", source: "./apache/forward-proxy.conf", destination: "/tmp/"
+    apache.vm.provision "shell", path: "./apache/script.sh"
+    apache.vm.provision "hosts", type: "shell", path: "./hostname.sh"
+    apache.vm.provision "resolv", type: "shell", path: "./resolv.sh"
+   end
+  
+  config.vm.define "userinfo" do |userinfo|
+    userinfo.vm.network "forwarded_port", guest: 80, host: 8080
+    userinfo.vm.hostname = "userinfo"
+    userinfo.vm.network "public_network",
+      ip: "192.168.1.7",
+      netmask: "255.255.255.224",
+      bridge: "enp3s0"
+    userinfo.vm.provision "file", source: "./userinfo/ssh_key",           destination: "/tmp/"
+    userinfo.vm.provision "file", source: "./userinfo/main.cf",           destination: "/tmp/"
+    userinfo.vm.provision "file", source: "./userinfo/roundcube.conf",    destination: "/tmp/"
+    userinfo.vm.provision "file", source: "./userinfo/dovecot.conf",      destination: "/tmp/"
+    userinfo.vm.provision "file", source: "./userinfo/config.inc.php",    destination: "/tmp/"
+    userinfo.vm.provision "shell", path: "./userinfo/script.sh"
+    userinfo.vm.provision "hosts", type: "shell", path: "./hostname.sh"
+    userinfo.vm.provision "resolv", type: "shell", path: "./resolv.sh"
+    userinfo.vm.provision "postfix-resolv", type: "shell", inline: "cp -a /etc/resolv.conf /var/spool/postfix/etc/"
+ end
+
+  config.vm.define "ldap" do |ldap|
+    ldap.vm.hostname = "ldap"
+    ldap.vm.network "public_network",
+      ip: "192.168.1.8",
+      bridge: "enp3s0",
+      netmask: "255.255.255.224"
+    ldap.vm.provision "file", source: "./ldap/addintogroups.ldif",   destination: "/tmp/"
+    ldap.vm.provision "file", source: "./ldap/base.ldif",   destination: "/tmp/"
+    ldap.vm.provision "file", source: "./ldap/groups.ldif",   destination: "/tmp/"
+    ldap.vm.provision "file", source: "./ldap/user.ldif",   destination: "/tmp/"
+    ldap.vm.provision "shell", path: "./ldap/script1.sh"
+    ldap.vm.provision "hosts", type: "shell", path: "./hostname.sh"
+    ldap.vm.provision "resolv", type: "shell", path: "./resolv.sh"
+  end
+
+end
+
+
